@@ -1,20 +1,88 @@
 
 
+<!DOCTYPE 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Zombie Survival Game</title>
-  <link rel="stylesheet" href="style.css">
+    <title>Zombie Survival</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <h1>🧟 Zombie Survival</h1>
 
-<canvas id="gameCanvas" width="400" height="600"></canvas>
+<canvas id="gameCanvas" width="700" height="500"></canvas>
 
-<script src="script.js"></script>
+<script>
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+// Player
+let player = {
+    x: 330,
+    y: 230,
+    width: 30,
+    height: 30,
+    speed: 5
+};
+
+// Keys
+let keys = {};
+
+document.addEventListener("keydown", (e)=>{
+    keys[e.key.toLowerCase()] = true;
+});
+
+document.addEventListener("keyup", (e)=>{
+    keys[e.key.toLowerCase()] = false;
+});
+
+// Game Loop
+function update(){
+
+    if(keys["arrowup"] || keys["w"])
+        player.y -= player.speed;
+
+    if(keys["arrowdown"] || keys["s"])
+        player.y += player.speed;
+
+    if(keys["arrowleft"] || keys["a"])
+        player.x -= player.speed;
+
+    if(keys["arrowright"] || keys["d"])
+        player.x += player.speed;
+
+    // Boundary
+    if(player.x < 0) player.x = 0;
+    if(player.y < 0) player.y = 0;
+
+    if(player.x > canvas.width-player.width)
+        player.x = canvas.width-player.width;
+
+    if(player.y > canvas.height-player.height)
+        player.y = canvas.height-player.height;
+}
+
+function draw(){
+
+    ctx.fillStyle="green";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    ctx.fillStyle="blue";
+    ctx.fillRect(player.x,player.y,player.width,player.height);
+
+}
+
+function gameLoop(){
+    update();
+    draw();
+    requestAnimationFrame(gameLoop);
+}
+
+gameLoop();
+
+</script>
 
 </body>
 </html>
