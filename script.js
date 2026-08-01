@@ -39,6 +39,15 @@ function shoot() {
         speed: 8
     });
 }
+const shootBtn = document.getElementById("shootBtn");
+
+shootBtn.addEventListener("touchstart", () => {
+    shoot();
+});
+
+shootBtn.addEventListener("click", () => {
+    shoot();
+});
 function update(){
 
     // Player Movement
