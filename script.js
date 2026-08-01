@@ -20,17 +20,25 @@ const zombie = {
     height: 30,
     speed: 1.5
 };
-
+let bullets = [];
 const keys = {};
 
-document.addEventListener("keydown", (e)=>{
+document.addEventListener("keydown", (e) => {
     keys[e.key.toLowerCase()] = true;
-});
 
-document.addEventListener("keyup", (e)=>{
-    keys[e.key.toLowerCase()] = false;
+    if (e.code === "Space") {
+        shoot();
+    }
 });
-
+function shoot() {
+    bullets.push({
+        x: player.x + player.width / 2,
+        y: player.y + player.height / 2,
+        width: 6,
+        height: 6,
+        speed: 8
+    });
+}
 function update(){
 
     // Player Movement
@@ -67,7 +75,14 @@ function update(){
             player.health = 0;
     }
 }
+for (let i = 0; i < bullets.length; i++) {
+    bullets[i].y -= bullets[i].speed;
 
+    if (bullets[i].y < 0) {
+        bullets.splice(i, 1);
+        i--;
+    }
+}
 function draw(){
 
     // Ground
@@ -101,3 +116,8 @@ function gameLoop(){
 
 gameLoop();
 
+ctx.fillStyle = "yellow";
+
+for (let bullet of bullets) {
+    ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+    }
