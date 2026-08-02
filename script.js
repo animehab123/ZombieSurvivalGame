@@ -21,6 +21,11 @@ const zombie = {
     speed: 1.5
 };
 let bullets = [];
+// Bullets
+ctx.fillStyle = "yellow";
+for (let bullet of bullets) {
+    ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+}
 const keys = {};
 
 document.addEventListener("keydown", (e) => {
@@ -125,8 +130,6 @@ function gameLoop(){
 
 gameLoop();
 
-ctx.fillStyle = "yellow";
 
-for (let bullet of bullets) {
-    ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
-    }
+
+
