@@ -124,8 +124,8 @@ ctx.fillStyle = "yellow";
 
 for (let bullet of bullets) {
     ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+       }
 }
-
 function gameLoop(){
     update();
     draw();
