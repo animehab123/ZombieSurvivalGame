@@ -122,7 +122,7 @@ function draw(){
     // Bullets
 ctx.fillStyle = "yellow";
 
-for (let bullet of bullets) {
+for (let bullet of bullets) }{
     ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
        }
 }
