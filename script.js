@@ -1,4 +1,3 @@
-
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
@@ -20,14 +19,11 @@ const zombie = {
     height: 30,
     speed: 1.5
 };
+
 let bullets = [];
-// Bullets
-ctx.fillStyle = "yellow";
-for (let bullet of bullets) {
-    ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
-}
 const keys = {};
 
+// Keyboard
 document.addEventListener("keydown", (e) => {
     keys[e.key.toLowerCase()] = true;
 
@@ -35,98 +31,108 @@ document.addEventListener("keydown", (e) => {
         shoot();
     }
 });
+
+document.addEventListener("keyup", (e) => {
+    keys[e.key.toLowerCase()] = false;
+});
+
+// Shoot button
+const shootBtn = document.getElementById("shootBtn");
+
+if (shootBtn) {
+    shootBtn.addEventListener("click", shoot);
+    shootBtn.addEventListener("touchstart", shoot);
+}
+
+// Shoot function
 function shoot() {
     bullets.push({
-        x: player.x + player.width / 2,
-        y: player.y + player.height / 2,
+        x: player.x + player.width / 2 - 3,
+        y: player.y,
         width: 6,
-        height: 6,
+        height: 10,
         speed: 8
     });
 }
-const shootBtn = document.getElementById("shootBtn");
 
-shootBtn.addEventListener("touchstart", () => {
-    shoot();
-});
-
-shootBtn.addEventListener("click", () => {
-    shoot();
-});
-function update(){
+function update() {
 
     // Player Movement
-    if(keys["w"] || keys["arrowup"]) player.y -= player.speed;
-    if(keys["s"] || keys["arrowdown"]) player.y += player.speed;
-    if(keys["a"] || keys["arrowleft"]) player.x -= player.speed;
-    if(keys["d"] || keys["arrowright"]) player.x += player.speed;
+    if (keys["w"] || keys["arrowup"]) player.y -= player.speed;
+    if (keys["s"] || keys["arrowdown"]) player.y += player.speed;
+    if (keys["a"] || keys["arrowleft"]) player.x -= player.speed;
+    if (keys["d"] || keys["arrowright"]) player.x += player.speed;
 
     // Boundaries
-    player.x = Math.max(0, Math.min(canvas.width-player.width, player.x));
-    player.y = Math.max(0, Math.min(canvas.height-player.height, player.y));
+    player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
+    player.y = Math.max(0, Math.min(canvas.height - player.height, player.y));
 
     // Zombie follows player
     let dx = player.x - zombie.x;
     let dy = player.y - zombie.y;
+    let dist = Math.sqrt(dx * dx + dy * dy);
 
-    let dist = Math.sqrt(dx*dx + dy*dy);
-
-    if(dist > 1){
-        zombie.x += dx/dist * zombie.speed;
-        zombie.y += dy/dist * zombie.speed;
+    if (dist > 1) {
+        zombie.x += dx / dist * zombie.speed;
+        zombie.y += dy / dist * zombie.speed;
     }
 
     // Collision
-    if(
+    if (
         player.x < zombie.x + zombie.width &&
         player.x + player.width > zombie.x &&
         player.y < zombie.y + zombie.height &&
         player.y + player.height > zombie.y
-    ){
+    ) {
         player.health -= 0.2;
 
-        if(player.health < 0)
+        if (player.health < 0) {
             player.health = 0;
-for (let i = 0; i < bullets.length; i++) {
-    bullets[i].y -= bullets[i].speed;
+        }
+    }
 
-    if (bullets[i].y < 0) {
-        bullets.splice(i, 1);
-        i--;
+    // Bullet movement
+    for (let i = bullets.length - 1; i >= 0; i--) {
+        bullets[i].y -= bullets[i].speed;
+
+        if (bullets[i].y < 0) {
+            bullets.splice(i, 1);
+        }
     }
 }
-function draw(){
+
+function draw() {
 
     // Ground
-    ctx.fillStyle="green";
-    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle = "green";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Health
-    ctx.fillStyle="red";
-    ctx.fillRect(20,20,200,20);
+    // Health Bar
+    ctx.fillStyle = "red";
+    ctx.fillRect(20, 20, 200, 20);
 
-    ctx.fillStyle="lime";
-    ctx.fillRect(20,20,player.health*2,20);
+    ctx.fillStyle = "lime";
+    ctx.fillRect(20, 20, player.health * 2, 20);
 
-    ctx.strokeStyle="white";
-    ctx.strokeRect(20,20,200,20);
+    ctx.strokeStyle = "white";
+    ctx.strokeRect(20, 20, 200, 20);
 
     // Player
-    ctx.fillStyle="blue";
-    ctx.fillRect(player.x,player.y,player.width,player.height);
+    ctx.fillStyle = "blue";
+    ctx.fillRect(player.x, player.y, player.width, player.height);
 
     // Zombie
-    ctx.fillStyle="darkred";
-    ctx.fillRect(zombie.x,zombie.y,zombie.width,zombie.height);
-    
-    // Bullets
-ctx.fillStyle = "yellow";
+    ctx.fillStyle = "darkred";
+    ctx.fillRect(zombie.x, zombie.y, zombie.width, zombie.height);
 
-for (let bullet of bullets) }{
-    ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
-       }
+    // Bullets
+    ctx.fillStyle = "yellow";
+    for (let bullet of bullets) {
+        ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+    }
 }
-function gameLoop(){
+
+function gameLoop() {
     update();
     draw();
     requestAnimationFrame(gameLoop);
