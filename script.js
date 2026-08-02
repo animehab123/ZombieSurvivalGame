@@ -87,8 +87,6 @@ function update(){
 
         if(player.health < 0)
             player.health = 0;
-    }
-}
 for (let i = 0; i < bullets.length; i++) {
     bullets[i].y -= bullets[i].speed;
 
@@ -120,6 +118,12 @@ function draw(){
     // Zombie
     ctx.fillStyle="darkred";
     ctx.fillRect(zombie.x,zombie.y,zombie.width,zombie.height);
+    
+    // Bullets
+ctx.fillStyle = "yellow";
+
+for (let bullet of bullets) {
+    ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
 }
 
 function gameLoop(){
