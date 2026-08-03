@@ -98,6 +98,21 @@ function update() {
         if (bullets[i].y < 0) {
             bullets.splice(i, 1);
         }
+       // Bullet hits zombie
+if (
+    bullets[i].x < zombie.x + zombie.width &&
+    bullets[i].x + bullets[i].width > zombie.x &&
+    bullets[i].y < zombie.y + zombie.height &&
+    bullets[i].y + bullets[i].height > zombie.y
+) {
+    bullets.splice(i, 1);
+
+    // Zombie respawn
+    zombie.x = Math.random() * (canvas.width - zombie.width);
+    zombie.y = Math.random() * (canvas.height - zombie.height);
+
+    break;
+ }
     }
 }
 
